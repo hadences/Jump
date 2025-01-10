@@ -1,0 +1,175 @@
+[gd_scene load_steps=18 format=4 uid="uid://165ygapme8i3"]
+
+[ext_resource type="Script" path="res://scripts/game/Game.cs" id="1_h76pj"]
+[ext_resource type="Texture2D" uid="uid://cmqw6ifvtpcxh" path="res://assets/textures/temp/square.png" id="2_khc0d"]
+[ext_resource type="Texture2D" uid="uid://cr01frllc5536" path="res://assets/textures/environment/floor.png" id="3_503vg"]
+[ext_resource type="PackedScene" uid="uid://cdmbbq1cfk1yc" path="res://player/Player.tscn" id="3_j3bqv"]
+[ext_resource type="PackedScene" uid="uid://dn37o05lq3757" path="res://obstacle_spawner/ObstacleSpawner.tscn" id="4_ltsi8"]
+[ext_resource type="Texture2D" uid="uid://7nhraoffjei0" path="res://assets/textures/environment/background.png" id="4_pnjpp"]
+[ext_resource type="PackedScene" uid="uid://dvi8w68rxknyl" path="res://obstacle_spawner/Obstacle.tscn" id="5_a6otk"]
+[ext_resource type="PackedScene" uid="uid://domqgensgnjfw" path="res://hud/HealthDisplay.tscn" id="6_01hth"]
+[ext_resource type="Script" path="res://scripts/hud/Hud.cs" id="6_ij887"]
+[ext_resource type="PackedScene" uid="uid://cwcfmlx5lt52n" path="res://hud/Chroma.tscn" id="6_v0gmw"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_i56uy"]
+texture = ExtResource("2_khc0d")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xt3os"]
+texture = ExtResource("3_503vg")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSet" id="TileSet_oexhk"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_i56uy")
+sources/1 = SubResource("TileSetAtlasSource_xt3os")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tvra6"]
+texture = ExtResource("4_pnjpp")
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_j6uo6"]
+sources/0 = SubResource("TileSetAtlasSource_tvra6")
+
+[sub_resource type="LabelSettings" id="LabelSettings_gl260"]
+font_size = 8
+
+[sub_resource type="LabelSettings" id="LabelSettings_ocn4d"]
+font_size = 10
+
+[node name="Game" type="Node2D" node_paths=PackedStringArray("player", "obstacleSpawner", "hud", "chromaTransitioner")]
+script = ExtResource("1_h76pj")
+player = NodePath("Player")
+obstacleSpawner = NodePath("ObstacleSpawner")
+hud = NodePath("HUD")
+chromaTransitioner = NodePath("Chroma")
+
+[node name="TileMap" type="Node2D" parent="."]
+
+[node name="Ground" type="TileMapLayer" parent="TileMap"]
+use_parent_material = true
+tile_map_data = PackedByteArray("AAAAAA4AAQAAAAAAAAABAA4AAQAAAAAAAAACAA4AAQAAAAAAAAADAA4AAQAAAAAAAAAEAA4AAQAAAAAAAAAFAA4AAQAAAAAAAAAGAA4AAQAAAAAAAAAHAA4AAQAAAAAAAAAIAA4AAQAAAAAAAAAJAA4AAQAAAAAAAAAKAA4AAQAAAAAAAAALAA4AAQAAAAAAAAAMAA4AAQAAAAAAAAANAA4AAQAAAAAAAAAOAA4AAQAAAAAAAAAPAA4AAQAAAAAAAAAQAA4AAQAAAAAAAAARAA4AAQAAAAAAAAASAA4AAQAAAAAAAAATAA4AAQAAAAAAAAAAAA0AAQAAAAAAAAABAA0AAQAAAAAAAAACAA0AAQAAAAAAAAADAA0AAQAAAAAAAAAEAA0AAQAAAAAAAAAFAA0AAQAAAAAAAAAGAA0AAQAAAAAAAAAHAA0AAQAAAAAAAAAIAA0AAQAAAAAAAAAJAA0AAQAAAAAAAAAKAA0AAQAAAAAAAAALAA0AAQAAAAAAAAAMAA0AAQAAAAAAAAANAA0AAQAAAAAAAAAOAA0AAQAAAAAAAAAPAA0AAQAAAAAAAAAQAA0AAQAAAAAAAAARAA0AAQAAAAAAAAASAA0AAQAAAAAAAAATAA0AAQAAAAAAAAATAAwAAQAAAAAAAAASAAwAAQAAAAAAAAARAAwAAQAAAAAAAAAQAAwAAQAAAAAAAAAPAAwAAQAAAAAAAAAOAAwAAQAAAAAAAAANAAwAAQAAAAAAAAAMAAwAAQAAAAAAAAALAAwAAQAAAAAAAAAKAAwAAQAAAAAAAAAJAAwAAQAAAAAAAAAIAAwAAQAAAAAAAAAHAAwAAQAAAAAAAAAGAAwAAQAAAAAAAAAFAAwAAQAAAAAAAAAEAAwAAQAAAAAAAAADAAwAAQAAAAAAAAACAAwAAQAAAAAAAAABAAwAAQAAAAAAAAAAAAwAAQAAAAAAAAA=")
+tile_set = SubResource("TileSet_oexhk")
+
+[node name="Background" type="TileMapLayer" parent="TileMap"]
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAAsAAAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAABAAIAAAAAAAAAAAABAAMAAAAAAAAAAAABAAQAAAAAAAAAAAABAAUAAAAAAAAAAAABAAYAAAAAAAAAAAABAAcAAAAAAAAAAAABAAgAAAAAAAAAAAABAAkAAAAAAAAAAAABAAoAAAAAAAAAAAABAAsAAAAAAAAAAAACAAAAAAAAAAAAAAACAAEAAAAAAAAAAAACAAIAAAAAAAAAAAACAAMAAAAAAAAAAAACAAQAAAAAAAAAAAACAAUAAAAAAAAAAAACAAYAAAAAAAAAAAACAAcAAAAAAAAAAAACAAgAAAAAAAAAAAACAAkAAAAAAAAAAAACAAoAAAAAAAAAAAACAAsAAAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAADAAIAAAAAAAAAAAADAAMAAAAAAAAAAAADAAQAAAAAAAAAAAADAAUAAAAAAAAAAAADAAYAAAAAAAAAAAADAAcAAAAAAAAAAAADAAgAAAAAAAAAAAADAAkAAAAAAAAAAAADAAoAAAAAAAAAAAADAAsAAAAAAAAAAAAEAAAAAAAAAAAAAAAEAAEAAAAAAAAAAAAEAAIAAAAAAAAAAAAEAAMAAAAAAAAAAAAEAAQAAAAAAAAAAAAEAAUAAAAAAAAAAAAEAAYAAAAAAAAAAAAEAAcAAAAAAAAAAAAEAAgAAAAAAAAAAAAEAAkAAAAAAAAAAAAEAAoAAAAAAAAAAAAEAAsAAAAAAAAAAAAFAAAAAAAAAAAAAAAFAAEAAAAAAAAAAAAFAAIAAAAAAAAAAAAFAAMAAAAAAAAAAAAFAAQAAAAAAAAAAAAFAAUAAAAAAAAAAAAFAAYAAAAAAAAAAAAFAAcAAAAAAAAAAAAFAAgAAAAAAAAAAAAFAAkAAAAAAAAAAAAFAAoAAAAAAAAAAAAFAAsAAAAAAAAAAAAGAAAAAAAAAAAAAAAGAAEAAAAAAAAAAAAGAAIAAAAAAAAAAAAGAAMAAAAAAAAAAAAGAAQAAAAAAAAAAAAGAAUAAAAAAAAAAAAGAAYAAAAAAAAAAAAGAAcAAAAAAAAAAAAGAAgAAAAAAAAAAAAGAAkAAAAAAAAAAAAGAAoAAAAAAAAAAAAGAAsAAAAAAAAAAAAHAAAAAAAAAAAAAAAHAAEAAAAAAAAAAAAHAAIAAAAAAAAAAAAHAAMAAAAAAAAAAAAHAAQAAAAAAAAAAAAHAAUAAAAAAAAAAAAHAAYAAAAAAAAAAAAHAAcAAAAAAAAAAAAHAAgAAAAAAAAAAAAHAAkAAAAAAAAAAAAHAAoAAAAAAAAAAAAHAAsAAAAAAAAAAAAIAAAAAAAAAAAAAAAIAAEAAAAAAAAAAAAIAAIAAAAAAAAAAAAIAAMAAAAAAAAAAAAIAAQAAAAAAAAAAAAIAAUAAAAAAAAAAAAIAAYAAAAAAAAAAAAIAAcAAAAAAAAAAAAIAAgAAAAAAAAAAAAIAAkAAAAAAAAAAAAIAAoAAAAAAAAAAAAIAAsAAAAAAAAAAAAJAAAAAAAAAAAAAAAJAAEAAAAAAAAAAAAJAAIAAAAAAAAAAAAJAAMAAAAAAAAAAAAJAAQAAAAAAAAAAAAJAAUAAAAAAAAAAAAJAAYAAAAAAAAAAAAJAAcAAAAAAAAAAAAJAAgAAAAAAAAAAAAJAAkAAAAAAAAAAAAJAAoAAAAAAAAAAAAJAAsAAAAAAAAAAAAKAAAAAAAAAAAAAAAKAAEAAAAAAAAAAAAKAAIAAAAAAAAAAAAKAAMAAAAAAAAAAAAKAAQAAAAAAAAAAAAKAAUAAAAAAAAAAAAKAAYAAAAAAAAAAAAKAAcAAAAAAAAAAAAKAAgAAAAAAAAAAAAKAAkAAAAAAAAAAAAKAAoAAAAAAAAAAAAKAAsAAAAAAAAAAAALAAAAAAAAAAAAAAALAAEAAAAAAAAAAAALAAIAAAAAAAAAAAALAAMAAAAAAAAAAAALAAQAAAAAAAAAAAALAAUAAAAAAAAAAAALAAYAAAAAAAAAAAALAAcAAAAAAAAAAAALAAgAAAAAAAAAAAALAAkAAAAAAAAAAAALAAoAAAAAAAAAAAALAAsAAAAAAAAAAAAMAAAAAAAAAAAAAAAMAAEAAAAAAAAAAAAMAAIAAAAAAAAAAAAMAAMAAAAAAAAAAAAMAAQAAAAAAAAAAAAMAAUAAAAAAAAAAAAMAAYAAAAAAAAAAAAMAAcAAAAAAAAAAAAMAAgAAAAAAAAAAAAMAAkAAAAAAAAAAAAMAAoAAAAAAAAAAAAMAAsAAAAAAAAAAAANAAAAAAAAAAAAAAANAAEAAAAAAAAAAAANAAIAAAAAAAAAAAANAAMAAAAAAAAAAAANAAQAAAAAAAAAAAANAAUAAAAAAAAAAAANAAYAAAAAAAAAAAANAAcAAAAAAAAAAAANAAgAAAAAAAAAAAANAAkAAAAAAAAAAAANAAoAAAAAAAAAAAANAAsAAAAAAAAAAAAOAAAAAAAAAAAAAAAOAAEAAAAAAAAAAAAOAAIAAAAAAAAAAAAOAAMAAAAAAAAAAAAOAAQAAAAAAAAAAAAOAAUAAAAAAAAAAAAOAAYAAAAAAAAAAAAOAAcAAAAAAAAAAAAOAAgAAAAAAAAAAAAOAAkAAAAAAAAAAAAOAAoAAAAAAAAAAAAOAAsAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAEAAAAAAAAAAAAPAAIAAAAAAAAAAAAPAAMAAAAAAAAAAAAPAAQAAAAAAAAAAAAPAAUAAAAAAAAAAAAPAAYAAAAAAAAAAAAPAAcAAAAAAAAAAAAPAAgAAAAAAAAAAAAPAAkAAAAAAAAAAAAPAAoAAAAAAAAAAAAPAAsAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAEAAAAAAAAAAAAQAAIAAAAAAAAAAAAQAAMAAAAAAAAAAAAQAAQAAAAAAAAAAAAQAAUAAAAAAAAAAAAQAAYAAAAAAAAAAAAQAAcAAAAAAAAAAAAQAAgAAAAAAAAAAAAQAAkAAAAAAAAAAAAQAAoAAAAAAAAAAAAQAAsAAAAAAAAAAAARAAAAAAAAAAAAAAARAAEAAAAAAAAAAAARAAIAAAAAAAAAAAARAAMAAAAAAAAAAAARAAQAAAAAAAAAAAARAAUAAAAAAAAAAAARAAYAAAAAAAAAAAARAAcAAAAAAAAAAAARAAgAAAAAAAAAAAARAAkAAAAAAAAAAAARAAoAAAAAAAAAAAARAAsAAAAAAAAAAAASAAAAAAAAAAAAAAASAAEAAAAAAAAAAAASAAIAAAAAAAAAAAASAAMAAAAAAAAAAAASAAQAAAAAAAAAAAASAAUAAAAAAAAAAAASAAYAAAAAAAAAAAASAAcAAAAAAAAAAAASAAgAAAAAAAAAAAASAAkAAAAAAAAAAAASAAoAAAAAAAAAAAASAAsAAAAAAAAAAAATAAAAAAAAAAAAAAATAAEAAAAAAAAAAAATAAIAAAAAAAAAAAATAAMAAAAAAAAAAAATAAQAAAAAAAAAAAATAAUAAAAAAAAAAAATAAYAAAAAAAAAAAATAAcAAAAAAAAAAAATAAgAAAAAAAAAAAATAAkAAAAAAAAAAAATAAoAAAAAAAAAAAATAAsAAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_j6uo6")
+
+[node name="Player" parent="." node_paths=PackedStringArray("healthDisplay") instance=ExtResource("3_j3bqv")]
+position = Vector2(160, 176)
+jumpVelocity = 300.0
+healthDisplay = NodePath("../HUD/HealthDisplay")
+
+[node name="ObstacleSpawner" parent="." instance=ExtResource("4_ltsi8")]
+position = Vector2(344, 184)
+obstacleScene = ExtResource("5_a6otk")
+
+[node name="Chroma" parent="." instance=ExtResource("6_v0gmw")]
+
+[node name="HUD" type="CanvasLayer" parent="." node_paths=PackedStringArray("mainScreen", "deathScreen", "scoreLabel", "highScoreLabel")]
+script = ExtResource("6_ij887")
+mainScreen = NodePath("MainScreen")
+deathScreen = NodePath("DeathScreen")
+scoreLabel = NodePath("Score")
+highScoreLabel = NodePath("HighScore")
+
+[node name="HealthDisplay" parent="HUD" node_paths=PackedStringArray("player") instance=ExtResource("6_01hth")]
+player = NodePath("../../Player")
+
+[node name="MainScreen" type="Control" parent="HUD"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="HUD/MainScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -43.0
+offset_top = -25.0
+offset_right = 43.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Jump - 점프 
+"
+
+[node name="Subtitle" type="Label" parent="HUD/MainScreen/Title"]
+layout_mode = 0
+offset_left = -39.5
+offset_top = 24.0
+offset_right = 122.5
+offset_bottom = 47.0
+text = "Press space to begin.."
+label_settings = SubResource("LabelSettings_gl260")
+horizontal_alignment = 1
+
+[node name="DeathScreen" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="HUD/DeathScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -43.0
+offset_top = -24.0
+offset_right = 43.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "You Died!"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="HUD/DeathScreen/Title"]
+layout_mode = 0
+offset_left = -39.5
+offset_top = 24.0
+offset_right = 122.5
+offset_bottom = 47.0
+text = "Press space to continue.."
+label_settings = SubResource("LabelSettings_gl260")
+horizontal_alignment = 1
+
+[node name="Score" type="Label" parent="HUD"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HighScore" type="Label" parent="HUD"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -80.0
+offset_bottom = 23.0
+grow_horizontal = 0
+text = "High Score : 0"
+label_settings = SubResource("LabelSettings_ocn4d")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="PlayerDied" from="Player" to="." method="onPlayerDeath"]
+[connection signal="PlayerJumped" from="Player" to="." method="onPlayerJumped"]

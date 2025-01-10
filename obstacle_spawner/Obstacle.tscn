@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://dvi8w68rxknyl"]
+
+[ext_resource type="Script" path="res://scripts/obstacle_spawner/Obstacle.cs" id="1_8clas"]
+[ext_resource type="Texture2D" uid="uid://cr01frllc5536" path="res://assets/textures/environment/floor.png" id="2_kjxmx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_muj82"]
+size = Vector2(16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bxaw6"]
+size = Vector2(8, 112)
+
+[node name="Obstacle" type="Area2D"]
+script = ExtResource("1_8clas")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_kjxmx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_muj82")
+
+[node name="PointCollider" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PointCollider"]
+position = Vector2(0, -72)
+shape = SubResource("RectangleShape2D_bxaw6")
+
+[connection signal="area_entered" from="." to="." method="onAreaEntered"]
+[connection signal="area_entered" from="PointCollider" to="." method="onScoreCollision"]
